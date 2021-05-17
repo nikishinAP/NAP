@@ -85,13 +85,13 @@ function main() {
 			//кинетическая энергия
 			ctx_kin.clearRect(0, 0, w1, h1); //чистит наш график
 			var max_kin = coords[0].length*75;
-			axis(ctx_kin, w1, h1, max_kin);
+			axis(ctx_kin, max_kin);
 			graph(ctx_kin, kins, max_kin, 1);
 
 			//давление
 			ctx_stress.clearRect(0, 0, w2, h2); //чистит наш график
 			var max_str = coords[0].length*250;
-			axis(ctx_stress, w2, h2, max_str);
+			axis(ctx_stress, max_str);
 			graph(ctx_stress, average_stress, max_str, 1);
 			}
 		}
@@ -216,7 +216,7 @@ function main() {
 	   draw();
    }
 
-   function axis(ctx, w, h, max) {
+   function axis(ctx, max) {
 		ctx.fillStyle = 'black';
 		// цикл для отображения значений по Y 
 		for(let i = 0; i < 6; i++) { 
