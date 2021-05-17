@@ -2,7 +2,7 @@ window.addEventListener('load', main, false);
 function main() {
 		var canvas = document.getElementById('canvas');
 		var ctx = canvas.getContext('2d'); //создаю канвас для шариков
-		//графики
+		//ГРАФИКИ
 		var canvas1 = document.getElementById('graphic_ctx1');
 		var canvas2 = document.getElementById('graphic_ctx2');
 		var ctx_kin = canvas1.getContext('2d');
@@ -31,7 +31,7 @@ function main() {
 			time = 0;
 			stresses_sum = 0;
 			average_stress = [];
-		} //функция обновляет массив
+		} //функция обнолвяет массив
 		
 		function coordsGen() {
 			coords = [
@@ -40,17 +40,17 @@ function main() {
 				[],//vx
 				[],//vy
 			] //создание пустого массива
-			var n = Number(document.querySelector('#num').value); //получаем данные с кнопки "количество шаров"
+			var n = Number(document.querySelector('#num').value); //получаем данные с кнопки "количесвто шаров"
 			if (n > 400) {
 				alert('Ваш компьютер не бессмертен. Введите значение не больше чем "400", ПОЖАЛУЙСТА.');
 				alert('Симуляция запуститься с 400 шариками.');
 				n = 400;
 			}
-			var S = w*h; //считаем площадь канваса
-			var s = S/n; //считаем площадь прямоугольника для заселения в них наших шариков
-			var a = (s**(1/2)); //рассчитываем середину этой фигуры
-			var cols = Math.ceil(w/a); //считаем и округляем количество столбцов в большую сторону до целого числа
-			var strings = Math.ceil(n/cols);  //считаем и округляем количество строчек в большую сторону до целого числа
+			var S = w*h; //считаем пплощадь канваса
+			var s = S/n; //считаем площадь премоугольника для заселения в них наших шариков
+			var a = (s**(1/2)); //расчитываем середину этой фигуры
+			var cols = Math.ceil(w/a); //считаем и округляем количесвто столбцов в большую сторону до целого числа
+			var strings = Math.ceil(n/cols);  //считаем и округляем количесвто строчек в большую сторону до целого числа
 			var currentx, currenty; //с помощью этих переменных и цикла сделаем так чтобы каждый шарик имел свое местоположение в уделенной ему площади
 					currenty = a/2;
 					for (var k = 0; k < strings; k++) {
@@ -68,11 +68,11 @@ function main() {
 				coords[0].pop();
 				coords[1].pop();
 			}
-			displayGenerator(maxStressCounter(coords[0].length)); //генерация дисплея давления
+			displayGenerator(maxStressCounter(coords[0].length)); //ГЕНЕРАЦИЯ ДИСПЛЕЯ ДАВЛЕНИЯ
 		}
 		//теперь рисуем и стираем наши шарики
 		function draw() {
-			//шарики
+			//ШАРИКИ
 			ctx.clearRect(0, 0, w, h); //чистит наш холст при передвижении шариков
 			for (var i = 0; i < coords[0].length; i++) {
 				ctx.beginPath();
@@ -81,17 +81,17 @@ function main() {
 				ctx.arc(coords[0][i],coords[1][i],R,0,2*Math.PI); //создает шар
 				ctx.fill(); // закрашивает в тот самый цвет
 
-			//графики
-			//кинетическая энергия
+			//ГРАФИКИ
+			//КИНЕТИЧЕСКАЯ ЭНЕРГИЯ
 			ctx_kin.clearRect(0, 0, w1, h1); //чистит наш график
 			var max_kin = coords[0].length*75;
-			axis(ctx_kin, max_kin);
+			axis(ctx_kin, w1, h1, max_kin);
 			graph(ctx_kin, kins, max_kin, 1);
 
-			//давление
+			//ДАВЛЕНИЕ
 			ctx_stress.clearRect(0, 0, w2, h2); //чистит наш график
 			var max_str = coords[0].length*250;
-			axis(ctx_stress, max_str);
+			axis(ctx_stress, w2, h2, max_str);
 			graph(ctx_stress, average_stress, max_str, 1);
 			}
 		}
@@ -107,14 +107,14 @@ function main() {
 		}
 
 		function graph(ctx, arr, max, dx) {
-			var x0 = 45; // старт по х
+			var x0 = 45; // СТАРТ по х
 			var pixs;
 			ctx.beginPath();
 			ctx.moveTo(x0, 395);
 			ctx.fillStyle = '#00FF00';
 			for(var i=0; i < arr.length; i++) {
 				x0 += dx;
-				pixs = (arr[i]/(max)*200)+5//приведение элемента в пиксе
+				pixs = (arr[i]/(max)*200)+5//ПРИВЕДЕНИЕ ЭЛ-ТА В ПИКСЕЛИ
 				ctx.lineTo(x0, (400-pixs));
 			 }
 			ctx.stroke();
@@ -139,7 +139,8 @@ function main() {
 
 		function maxStressCounter(amount) {
 			var max;
-			max = 0.0002*(amount**3) - 0.0403*(amount**2) + 24.21*amount + 1386; //Просчитываем максимальное значение в зависимости от шаров. функция построена с помощью онлайн сервиса по точкам
+			max = 0.0002*(amount**3) - 0.0403*(amount**2) + 24.21*amount + 1386; //Просчитываем максимальное значение в зависимости от шаров. ФУНКЦИЯ ПОСТРОЕНА С ПОМОЩЬЮ ОНЛАЙН СЕРВИСА ПО ТОЧКАМ
+			//max = -2228.58+2346*Math.log(amount);
 			return max;
 		}
 
@@ -173,12 +174,15 @@ function main() {
 					coords[2][i]*=-1; //при столкновении шарик меняет скорость на противоположную
 					coords[0][i]= (coords[0][i]<R) ? R : w-R; //условие для того, чтобы шарик не заходил за пределы стен 
 					stresses_sum += cur_stress; // Прибавляем последнее давление к сумме
+					cur_stress += stress(i, cur_stress)[0];
+					console.log(cur_stress);
 				}
 				if(coords[1][i]<R || coords[1][i]>h-R){ //условие на столкновение с горизонтальными стенками
 					coords[3][i]*=-1; //при столкновении шарик меняет скорость на противоположную
 					coords[1][i]= (coords[1][i]<R) ? R : h-R; //условие для того, чтобы шарик не заходил за пределы стен 
 					stresses_sum += cur_stress; // Прибавляем последнее давление к сумме
 					cur_stress += stress(i, cur_stress)[0];
+					console.log(cur_stress);
 				}
 				var arrow_rotate = document.querySelector('.stress_arrow').style;
 				if (cur_stress > 0 ) {cur_stress -= 1;}
@@ -200,35 +204,35 @@ function main() {
 					}
 				}
 			}
-			kins.push(kin()); //запоминание текущей кинетической энергии
+			kins.push(kin()); //ЗАПОМИНАНИЕ ТЕКУЩЕЙ КИН ЭНЕРГИИ
 			if (kins.length > 550) {
-				kins.shift(); //выбрасывание первого устаревшего
+				kins.shift(); //ВЫБРАСЫВАНИЕ ПЕРВОГО, УСТАРЕВШЕГО
 			}
-			time += 1/150; // прибавление времени
+			time += 1/150; // Прибавление времени
 			average_stress.push((stresses_sum/time).toFixed(2));
 			if (average_stress.length > 550) {
 				average_stress.shift();
 			}
 
 		}
-   function control() { //запускает функции рисования и физики
+   function control() { //запускает функции рислвания и физики
 	   physics();
 	   draw();
    }
 
-   function axis(ctx, max) {
+   function axis(ctx, w, h, max) {
 		ctx.fillStyle = 'black';
-		// цикл для отображения значений по Y 
+		// Цикл для отображения значений по Y 
 		for(let i = 0; i < 6; i++) { 
 	    ctx.fillText((5 - i) * max + "", 4, i * 80 + 60); 
 	    ctx.beginPath(); 
 	    ctx.moveTo(35, i * 80 + 60); 
 	    ctx.lineTo(45, i * 80 + 60); 
 	    ctx.stroke(); 
-	    ctx.fillStyle = "black"; // задаём чёрный цвет для линий 
-			ctx.beginPath(); // запускает путь
-			ctx.moveTo(45, 10); // указываем начальный путь
-			ctx.lineTo(45, 400); // перемешаем указатель
+	    ctx.fillStyle = "black"; // Задаём чёрный цвет для линий 
+			ctx.beginPath(); // Запускает путь
+			ctx.moveTo(45, 10); // Указываем начальный путь
+			ctx.lineTo(45, 400); // Перемешаем указатель
 			ctx.stroke();
 			ctx.beginPath();
 			ctx.moveTo(35, 395);
