@@ -129,7 +129,7 @@ input {
 	border-radius: 150px 45px 45px 150px / 45px 44px 44px 45px;
 	background-color: red;
 	transform: rotate(0deg) translate(-40px);
-	transition: transform .3s;
+	transition: transform .7s;
 }
 
 .digit {
